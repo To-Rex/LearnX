@@ -5,13 +5,15 @@ class ContactSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = MediaQuery.of(context).size.width >= 768;
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 16),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
+          colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
         ),
       ),
       child: Column(
@@ -19,7 +21,7 @@ class ContactSection extends StatelessWidget {
           const Text(
             'Sayohatingizni boshlashga tayyormisiz?',
             style: TextStyle(
-              fontSize: 36,
+              fontSize: 32,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
@@ -35,87 +37,75 @@ class ContactSection extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 60),
+          const SizedBox(height: 48),
+
           LayoutBuilder(
             builder: (context, constraints) {
+              final children = [
+                _buildContactCard(
+                  icon: Icons.phone,
+                  title: 'Qo\'ng\'iroq qiling',
+                  subtitle: 'Maslahatchilarimiz bilan gaplashing',
+                  info: '+998 90 123 45 67',
+                ),
+                _buildContactCard(
+                  icon: Icons.email,
+                  title: 'Email yuboring',
+                  subtitle: 'Batafsil ma\'lumot oling',
+                  info: 'info@worktravel.uz',
+                ),
+                _buildContactCard(
+                  icon: Icons.location_on,
+                  title: 'Bizni ziyorat qiling',
+                  subtitle: 'Shaxsan uchrashing',
+                  info: 'Toshkent, O\'zbekiston\nAmir Temur ko\'chasi 108',
+                ),
+              ];
+
               if (constraints.maxWidth > 768) {
-                return Row(
-                  children: [
-                    Expanded(child: _buildContactCard(
-                      Icons.phone,
-                      'Qo\'ng\'iroq qiling',
-                      'Maslahatchilarimiz bilan gaplashing',
-                      '+998 90 123 45 67',
-                    )),
-                    const SizedBox(width: 24),
-                    Expanded(child: _buildContactCard(
-                      Icons.email,
-                      'Email yuboring',
-                      'Batafsil ma\'lumot oling',
-                      'info@worktravel.uz',
-                    )),
-                    const SizedBox(width: 24),
-                    Expanded(child: _buildContactCard(
-                      Icons.location_on,
-                      'Bizni ziyorat qiling',
-                      'Shaxsan uchrashing',
-                      'Toshkent, O\'zbekiston\nAmir Temur ko\'chasi 108',
-                    )),
-                  ],
+                return IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      for (var i = 0; i < children.length; i++) ...[
+                        Expanded(child: children[i]),
+                        if (i != children.length - 1)
+                          const SizedBox(width: 24),
+                      ],
+                    ],
+                  ),
                 );
               } else {
                 return Column(
                   children: [
-                    _buildContactCard(
-                      Icons.phone,
-                      'Qo\'ng\'iroq qiling',
-                      'Maslahatchilarimiz bilan gaplashing',
-                      '+998 90 123 45 67',
-                    ),
-                    const SizedBox(height: 24),
-                    _buildContactCard(
-                      Icons.email,
-                      'Email yuboring',
-                      'Batafsil ma\'lumot oling',
-                      'info@worktravel.uz',
-                    ),
-                    const SizedBox(height: 24),
-                    _buildContactCard(
-                      Icons.location_on,
-                      'Bizni ziyorat qiling',
-                      'Shaxsan uchrashing',
-                      'Toshkent, O\'zbekiston\nAmir Temur ko\'chasi 108',
-                    ),
+                    for (var i = 0; i < children.length; i++) ...[
+                      children[i],
+                      if (i != children.length - 1)
+                        const SizedBox(height: 24),
+                    ],
                   ],
                 );
               }
             },
           ),
+
           const SizedBox(height: 48),
-          ElevatedButton(
+
+          ElevatedButton.icon(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
-              foregroundColor: Colors.blue,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              foregroundColor: Colors.blue.shade700,
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(30),
               ),
               elevation: 8,
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                Text(
-                  'Bepul maslahat olish',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(width: 8),
-                Icon(Icons.arrow_forward),
-              ],
+            icon: const Icon(Icons.arrow_forward),
+            label: const Text(
+              'Bepul maslahat olish',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -123,24 +113,23 @@ class ContactSection extends StatelessWidget {
     );
   }
 
-  Widget _buildContactCard(IconData icon, String title, String subtitle, String info) {
+  Widget _buildContactCard({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required String info,
+  }) {
     return Container(
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Colors.white.withOpacity(0.08),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.2),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.2)),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 48,
-            color: Colors.white,
-          ),
+          Icon(icon, size: 44, color: Colors.white),
           const SizedBox(height: 16),
           Text(
             title,
@@ -165,8 +154,9 @@ class ContactSection extends StatelessWidget {
             info,
             style: const TextStyle(
               fontSize: 16,
-              fontWeight: FontWeight.w600,
               color: Colors.white,
+              fontWeight: FontWeight.w600,
+              height: 1.4,
             ),
             textAlign: TextAlign.center,
           ),
