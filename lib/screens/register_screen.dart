@@ -18,28 +18,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _authService = AuthService();
+
+  DateTime? _birthDate;
+  String? _gender;
   bool _isLoading = false;
 
+  Future<void> _selectDate(BuildContext context) async {
+    final now = DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(now.year - 18),
+      firstDate: DateTime(1900),
+      lastDate: now,
+    );
+    if (picked != null) {
+      setState(() => _birthDate = picked);
+    }
+  }
+
   Future<void> _register() async {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() && _birthDate != null && _gender != null) {
       setState(() => _isLoading = true);
       try {
-        await _authService.signUp(
-          _emailController.text,
-          _passwordController.text,
-          _nameController.text,
-        );
-
-        if (mounted) {
-          Navigator.pushReplacementNamed(context, '/dashboard');
-        }
+        await _authService.signUp(context, _emailController.text.trim(), _passwordController.text.trim(), _nameController.text.trim(), birthDate: _birthDate!, gender: _gender!);
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ro‘yxatdan o‘tishda xatolik: ${e.toString()}')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Ro‘yxatdan o‘tishda xatolik: ${e.toString()}')),
+          );
         }
       } finally {
         if (mounted) setState(() => _isLoading = false);
       }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Iltimos, barcha maydonlarni to‘ldiring')),
+      );
     }
   }
 
@@ -85,82 +99,110 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           const SizedBox(height: 16),
                           Text('WorkTravel', style: GoogleFonts.poppins(fontSize: 26, fontWeight: FontWeight.bold)),
                           const SizedBox(height: 8),
-                          Text('Ro‘yxatdan o‘ting', style: GoogleFonts.poppins(fontSize: 16, color: Colors.black54),),
+                          Text('Ro‘yxatdan o‘ting', style: GoogleFonts.poppins(fontSize: 16, color: Colors.black54)),
                           const SizedBox(height: 24),
+
+                          // To‘liq ism
                           CustomTextField(
                             controller: _nameController,
                             label: 'To‘liq ism',
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Ismingizni kiriting';
-                              }
-                              return null;
-                            },
+                            validator: (value) => value == null || value.isEmpty ? 'Ismingizni kiriting' : null,
                           ),
                           const SizedBox(height: 16),
+
+                          // Email
                           CustomTextField(
                             controller: _emailController,
                             label: 'Email',
                             keyboardType: TextInputType.emailAddress,
                             validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Email kiriting';
-                              }
-                              if (!value.contains('@')) {
-                                return 'To‘g‘ri email kiriting';
-                              }
+                              if (value == null || value.isEmpty) return 'Email kiriting';
+                              if (!value.contains('@')) return 'To‘g‘ri email kiriting';
                               return null;
                             },
                           ),
                           const SizedBox(height: 16),
+
+                          // Parol
                           CustomTextField(
                             controller: _passwordController,
                             label: 'Parol',
                             obscureText: true,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Parol kiriting';
-                              }
-                              if (value.length < 6) {
-                                return 'Parol kamida 6 ta belgidan iborat bo‘lishi kerak';
-                              }
-                              return null;
-                            },
+                            validator: (value) => value == null || value.length < 6
+                                ? 'Parol kamida 6 ta belgidan iborat bo‘lishi kerak'
+                                : null,
                           ),
                           const SizedBox(height: 16),
+
+                          // Parolni tasdiqlash
                           CustomTextField(
                             controller: _confirmPasswordController,
                             label: 'Parolni tasdiqlang',
                             obscureText: true,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Parolni tasdiqlang';
-                              }
-                              if (value != _passwordController.text) {
-                                return 'Parollar mos kelmaydi';
-                              }
-                              return null;
-                            },
+                            validator: (value) => value != _passwordController.text ? 'Parollar mos kelmaydi' : null,
                           ),
-                          const SizedBox(height: 24),
-                          CustomButton(text: 'Ro‘yxatdan o‘tish', onPressed: _isLoading ? null : _register, isLoading: _isLoading),
                           const SizedBox(height: 16),
+
+                          // Tug‘ilgan sana
+                          InkWell(
+                            onTap: () => _selectDate(context),
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey.shade300),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                _birthDate == null
+                                    ? 'Tug‘ilgan sana'
+                                    : '${_birthDate!.day}.${_birthDate!.month}.${_birthDate!.year}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: _birthDate == null ? Colors.grey : Colors.black87,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+
+                          // Jins tanlash
+                          DropdownButtonFormField<String>(
+                            value: _gender,
+                            items: const [
+                              DropdownMenuItem(value: 'male', child: Text('Erkak')),
+                              DropdownMenuItem(value: 'female', child: Text('Ayol')),
+                            ],
+                            onChanged: (value) => setState(() => _gender = value),
+                            decoration: InputDecoration(
+                              labelText: 'Jins',
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            ),
+                            validator: (value) => value == null ? 'Jinsni tanlang' : null,
+                          ),
+
+                          const SizedBox(height: 24),
+                          CustomButton(
+                            text: 'Ro‘yxatdan o‘tish',
+                            onPressed: _isLoading ? null : _register,
+                            isLoading: _isLoading,
+                          ),
+                          const SizedBox(height: 16),
+
                           TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/login');
-                            },
+                            onPressed: () => Navigator.pushNamed(context, '/login'),
                             child: const Text('Hisobingiz bormi? Kiring'),
-                          )
-                        ]
-                      )
-                    )
-                  )
-                )
-              )
-            )
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           );
-        }
-      )
+        },
+      ),
     );
   }
 

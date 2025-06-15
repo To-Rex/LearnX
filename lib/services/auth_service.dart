@@ -1,45 +1,69 @@
-import '../models/user_model.dart';
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthService {
-  UserModel? _currentUser;
+  final SupabaseClient _client = Supabase.instance.client;
 
-  Future<UserModel> signIn(String email, String password) async {
-    // Simulate API call
-    await Future.delayed(const Duration(seconds: 2));
+  /// Foydalanuvchini ro‘yxatdan o‘tkazish
+  Future<void> signUp(
+      BuildContext context,
+      String email,
+      String password,
+      String fullName, {required DateTime birthDate, required String gender}) async {
+    // 1. Auth orqali foydalanuvchini ro'yxatdan o'tkazish
 
-    // Mock authentication - replace with real API
-    if (email.isNotEmpty && password.length >= 6) {
-      _currentUser = UserModel(
-        id: '1',
-        name: 'Test User',
+    final authResponse = await _client.auth.signUp(
         email: email,
-      );
-      return _currentUser!;
-    } else {
-      throw Exception('Noto\'g\'ri email yoki parol');
+        password: password,
+        data: {
+          'full_name': fullName,
+          'birth_date': birthDate.toIso8601String(),
+          'gender': gender,
+          'email': email,
+        });
+    final user = authResponse.user;
+    if (user == null) {
+      print("Foydalanuvchi ro'yxatdan o'ta olmadi.");
+      throw Exception("Foydalanuvchi ro'yxatdan o'ta olmadi.");
+    }
+
+    print("Foydalanuvchi ro'yxatdan o'tildi.");
+    Navigator.pushReplacementNamed(context, '/');
+  }
+
+  /// Foydalanuvchini tizimga kiritish
+  Future<void> signIn(String email, String password) async {
+    final response = await _client.auth.signInWithPassword(
+      email: email,
+      password: password,
+    );
+
+    if (response.user == null) {
+      throw Exception("Tizimga kirishda xatolik.");
     }
   }
 
-  Future<UserModel> signUp(String email, String password, String name) async {
-    // Simulate API call
-    await Future.delayed(const Duration(seconds: 2));
-
-    // Mock registration - replace with real API
-    _currentUser = UserModel(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      name: name,
-      email: email,
-    );
-    return _currentUser!;
-  }
-
+  /// Foydalanuvchini tizimdan chiqarish
   Future<void> signOut() async {
-    _currentUser = null;
+    await _client.auth.signOut();
   }
 
-  Future<UserModel?> getCurrentUser() async {
-    return _currentUser;
+  /// Joriy foydalanuvchini olish (null bo‘lishi mumkin)
+  User? getCurrentUser() {
+    return _client.auth.currentUser;
   }
 
-  bool get isLoggedIn => _currentUser != null;
+  /// Foydalanuvchi profilini olish
+  Future<Map<String, dynamic>?> getCurrentUserProfile() async {
+    final user = _client.auth.currentUser;
+    if (user == null) return null;
+
+    final response = await _client
+        .from('profiles')
+        .select()
+        .eq('id', user.id)
+        .maybeSingle();
+
+    return response;
+  }
 }

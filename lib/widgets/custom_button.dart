@@ -5,12 +5,7 @@ class CustomButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool isLoading;
 
-  const CustomButton({
-    super.key,
-    required this.text,
-    this.onPressed,
-    this.isLoading = false,
-  });
+  const CustomButton({super.key, required this.text, this.onPressed, this.isLoading = false});
 
   @override
   Widget build(BuildContext context) {
@@ -22,28 +17,15 @@ class CustomButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.blue,
           foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 2,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          elevation: 2
         ),
-        child: isLoading
-            ? const SizedBox(
+        child: isLoading ? const SizedBox(
           height: 20,
           width: 20,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-          ),
-        )
-            : Text(
-          text,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
+          child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+        ) : Text(text, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600))
+      )
     );
   }
 }
