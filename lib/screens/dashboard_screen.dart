@@ -43,12 +43,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         title: const Text('Dashboard'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: _logout,
-          ),
-        ],
       ),
       body: _currentUser == null
           ? const Center(child: CircularProgressIndicator())

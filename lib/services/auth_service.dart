@@ -10,7 +10,6 @@ class AuthService {
       String email,
       String password,
       String fullName, {required DateTime birthDate, required String gender}) async {
-    // 1. Auth orqali foydalanuvchini ro'yxatdan o'tkazish
 
     final authResponse = await _client.auth.signUp(
         email: email,
@@ -33,12 +32,19 @@ class AuthService {
 
   /// Foydalanuvchini tizimga kiritish
   Future<void> signIn(String email, String password) async {
-    final response = await _client.auth.signInWithPassword(
+    /*final response = await _client.auth.signInWithPassword(
       email: email,
       password: password,
     );
 
     if (response.user == null) {
+      print("Tizimga kirishda xatolik.");
+      throw Exception("Tizimga kirishda xatolik.");
+    }*/
+    try {
+      await _client.auth.signInWithPassword(email: email, password: password);
+    } catch (e) {
+      print("Tizimga kirishda xatolik.");
       throw Exception("Tizimga kirishda xatolik.");
     }
   }
