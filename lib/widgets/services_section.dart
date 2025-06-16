@@ -9,7 +9,7 @@ class ServicesSection extends StatelessWidget {
     final isWide = screenWidth > 768;
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical: screenWidth < 600 ? 60 : 100, horizontal: screenWidth < 600 ? 16 : 32),
+      padding: EdgeInsets.symmetric(vertical: screenWidth < 600 ? 60 : 80, horizontal: screenWidth < 600 ? 16 : 32),
       color: Colors.white,
       child: Center(
         child: ConstrainedBox(
@@ -173,7 +173,7 @@ class ServicesSection extends StatelessWidget {
                   ),
                 ],
               ),
-            )).toList(),
+            )),
           ],
         ),
       ),

@@ -3,6 +3,7 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:learnx/screens/dashboard_screen.dart';
 import 'package:learnx/screens/home_screen.dart';
 import 'package:learnx/screens/login_screen.dart';
+import 'package:learnx/screens/profile_screen.dart';
 import 'package:learnx/screens/register_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -35,6 +36,7 @@ class WorkTravelApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/dashboard': (context) => const DashboardScreen(),
+        '/profile': (context) => const ProfileScreen(),
       },
     );
   }

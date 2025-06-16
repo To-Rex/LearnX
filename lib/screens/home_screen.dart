@@ -59,7 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-
           /// CustomNavigationBar doim tepada turadi
           Positioned(
             top: 0,

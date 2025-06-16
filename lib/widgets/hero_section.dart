@@ -12,11 +12,8 @@ class HeroSection extends StatelessWidget {
     final isDesktop = screenWidth >= 1024;
 
     return Container(
-      padding: EdgeInsets.symmetric(
-        vertical: isMobile ? 60 : 100,
-        horizontal: 16,
-      ),
       width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: isMobile ? 80 : 140, horizontal: 16),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -26,8 +23,12 @@ class HeroSection extends StatelessWidget {
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1100),
+          constraints: const BoxConstraints(
+            maxWidth: 1100,
+            minHeight: 370, // 👈 Minimal balandlik qo‘shildi
+          ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center, // 👈 Vertikal markazlash
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(

@@ -19,12 +19,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _loadUserData();
   }
 
-
-
   Future<void> _loadUserData() async {
-    final user = _authService.getCurrentUser();
+    final user = await _authService.getCurrentUserProfile();
     setState(() {
-      _currentUser = user as UserModel?;
+      _currentUser = user;
     });
   }
 

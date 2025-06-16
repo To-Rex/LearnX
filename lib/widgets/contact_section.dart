@@ -8,7 +8,7 @@ class ContactSection extends StatelessWidget {
     final isDesktop = MediaQuery.of(context).size.width >= 768;
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 130, horizontal: 16),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],

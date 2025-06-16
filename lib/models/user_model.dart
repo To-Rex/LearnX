@@ -1,14 +1,14 @@
 class UserModel {
   final String id;
-  final String name;
   final String email;
-  final DateTime birthDate;
+  final String name;
+  final String birthDate;
   final String gender;
 
   UserModel({
     required this.id,
-    required this.name,
     required this.email,
+    required this.name,
     required this.birthDate,
     required this.gender,
   });
@@ -16,9 +16,9 @@ class UserModel {
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'],
-      name: json['name'],
       email: json['email'],
-      birthDate: DateTime.parse(json['birthDate']),
+      name: json['full_name'],
+      birthDate: json['birth_date'],
       gender: json['gender'],
     );
   }
@@ -26,10 +26,17 @@ class UserModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'name': name,
       'email': email,
-      'birthDate': birthDate.toIso8601String(),
-      'gender': gender
+      'full_name': name,
+      'birth_date': birthDate,
+      'gender': gender,
     };
   }
+
+  @override
+  String toString() {
+    return 'UserModel{id: $id, email: $email, name: $name, birthDate: $birthDate, gender: $gender}';
+  }
+
+
 }

@@ -15,16 +15,7 @@ class CustomNavigationBar extends StatelessWidget {
 
     return Container(
       height: 80,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
+      decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 2))]),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
@@ -32,14 +23,10 @@ class CustomNavigationBar extends StatelessWidget {
           children: [
             // Logo
             Row(
-              children: [
-                const Icon(
-                  Icons.flight_takeoff,
-                  size: 32,
-                  color: Colors.blue,
-                ),
-                const SizedBox(width: 8),
-                const Text(
+              children: const [
+                Icon(Icons.flight_takeoff, size: 32, color: Colors.blue),
+                SizedBox(width: 8),
+                Text(
                   'LearnX',
                   style: TextStyle(
                     fontSize: 24,
@@ -60,19 +47,44 @@ class CustomNavigationBar extends StatelessWidget {
                   _buildNavItem('Hikoyalar', 'testimonials'),
                   _buildNavItem('Aloqa', 'contact'),
                   const SizedBox(width: 16),
+
+                  // Avatar + Popup Menu
                   user != null
-                      ? CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.blue[100],
-                    backgroundImage: user.userMetadata?['avatar_url'] != null
-                        ? NetworkImage(user.userMetadata!['avatar_url'])
-                        : null,
-                    child: user.userMetadata?['avatar_url'] == null
-                        ? Text(
-                      user.userMetadata?['name']?.substring(0, 1).toUpperCase() ?? '?',
-                      style: const TextStyle(color: Colors.white),
-                    )
-                        : null,
+                      ? PopupMenuButton<String>(
+                    onSelected: (value) {
+                      if (value == 'profile') {
+                        Navigator.pushNamed(context, '/profile');
+                      } else if (value == 'logout') {
+                        Supabase.instance.client.auth.signOut();
+                        Navigator.pushReplacementNamed(context, '/');
+                      }
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 'profile',
+                        child: _buildMenuItem(Icons.person, 'Shaxsiy kabinet'),
+                      ),
+                      PopupMenuItem(
+                        value: 'logout',
+                        child: _buildMenuItem(Icons.logout, 'Chiqish'),
+                      ),
+                    ],
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.blue[100],
+                      backgroundImage: user.userMetadata?['avatar_url'] != null
+                          ? NetworkImage(user.userMetadata!['avatar_url'])
+                          : null,
+                      child: user.userMetadata?['avatar_url'] == null
+                          ? Text(
+                        user.userMetadata?['name']?.substring(0, 1).toUpperCase() ?? '?',
+                        style: const TextStyle(color: Colors.white),
+                      )
+                          : null,
+                    ),
                   )
                       : ElevatedButton(
                     onPressed: () => Navigator.pushNamed(context, '/login'),
@@ -99,6 +111,11 @@ class CustomNavigationBar extends StatelessWidget {
                 onSelected: (value) {
                   if (value == 'login') {
                     Navigator.pushNamed(context, '/login');
+                  } else if (value == 'logout') {
+                    Supabase.instance.client.auth.signOut();
+                    Navigator.pushReplacementNamed(context, '/');
+                  } else if (value == 'profile') {
+                    Navigator.pushNamed(context, '/profile');
                   } else {
                     onNavigate(value);
                   }
@@ -125,15 +142,21 @@ class CustomNavigationBar extends StatelessWidget {
                     child: _buildMenuItem(Icons.mail_outline, 'Aloqa'),
                   ),
                   const PopupMenuDivider(),
-                  user != null
-                      ? PopupMenuItem(
-                    value: 'profile',
-                    child: _buildMenuItem(Icons.person, user.userMetadata?['name'] ?? 'Profil'),
-                  )
-                      : PopupMenuItem(
-                    value: 'login',
-                    child: _buildMenuItem(Icons.login, 'Kirish'),
-                  ),
+                  if (user != null)
+                    PopupMenuItem(
+                      value: 'profile',
+                      child: _buildMenuItem(Icons.person, 'Shaxsiy kabinet'),
+                    ),
+                  if (user != null)
+                    PopupMenuItem(
+                      value: 'logout',
+                      child: _buildMenuItem(Icons.logout, 'Chiqish'),
+                    ),
+                  if (user == null)
+                    PopupMenuItem(
+                      value: 'login',
+                      child: _buildMenuItem(Icons.login, 'Kirish'),
+                    ),
                 ],
               ),
           ],

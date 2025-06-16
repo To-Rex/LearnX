@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../models/user_model.dart';
+
 class AuthService {
   final SupabaseClient _client = Supabase.instance.client;
 
@@ -55,21 +57,40 @@ class AuthService {
   }
 
   /// Joriy foydalanuvchini olish (null bo‘lishi mumkin)
-  User? getCurrentUser() {
+/*  User? getCurrentUser() {
     return _client.auth.currentUser;
-  }
+  }*/
 
-  /// Foydalanuvchi profilini olish
-  Future<Map<String, dynamic>?> getCurrentUserProfile() async {
+  UserModel? getCurrentUser() {
     final user = _client.auth.currentUser;
     if (user == null) return null;
 
-    final response = await _client
-        .from('profiles')
-        .select()
-        .eq('id', user.id)
-        .maybeSingle();
-
-    return response;
+    return UserModel(
+      id: user.id,
+      email: user.email ?? '',
+      name: user.userMetadata?['full_name'] ?? 'Foydalanuvchi',
+      birthDate: user.userMetadata?['birth_date'] ?? '',
+      gender: user.userMetadata?['gender'] ?? '',
+    );
   }
+
+
+  Future<UserModel?> getCurrentUserProfile() async {
+    final user = _client.auth.currentUser;
+    if (user == null) return null;
+
+    final response = await _client.from('users').select().eq('id', user.id).maybeSingle();
+
+    if (response == null) return null;
+
+    print(response);
+    return UserModel(
+      id: response['id'],
+      email: response['email'],
+      name: response['full_name'] ?? '',
+      birthDate: response['birth_date'] ?? '',
+      gender: response['gender'] ?? '',
+    );
+  }
+
 }

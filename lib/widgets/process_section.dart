@@ -6,7 +6,7 @@ class ProcessSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 150, horizontal: 16),
       color: Colors.grey.shade50,
       child: Column(
         children: [

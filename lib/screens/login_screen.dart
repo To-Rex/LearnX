@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await Supabase.instance.client.auth.signInWithOAuth(
         OAuthProvider.google,
-        redirectTo: 'https://friendly-boba-ca7aac.netlify.app',
+        redirectTo: 'https://friendly-boba-ca7aac.netlify.app/profile',
       );
     } catch (e) {
       if (mounted) {

@@ -6,7 +6,7 @@ class TestimonialsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 130, horizontal: 16),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [Color(0xFFF8FAFC), Color(0xFFEEF2FF)],
