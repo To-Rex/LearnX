@@ -4,10 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class CustomNavigationBar extends StatelessWidget {
   final Function(String) onNavigate;
 
-  const CustomNavigationBar({
-    super.key,
-    required this.onNavigate,
-  });
+  const CustomNavigationBar({super.key, required this.onNavigate});
 
   @override
   Widget build(BuildContext context) {
@@ -21,22 +18,13 @@ class CustomNavigationBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Logo
             Row(
               children: const [
                 Icon(Icons.flight_takeoff, size: 32, color: Colors.blue),
                 SizedBox(width: 8),
-                Text(
-                  'LearnX',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
+                Text('LearnX', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87))
+              ]
             ),
-
             // Navigation Menu
             if (MediaQuery.of(context).size.width > 768)
               Row(
@@ -47,10 +35,7 @@ class CustomNavigationBar extends StatelessWidget {
                   _buildNavItem('Hikoyalar', 'testimonials'),
                   _buildNavItem('Aloqa', 'contact'),
                   const SizedBox(width: 16),
-
-                  // Avatar + Popup Menu
-                  user != null
-                      ? PopupMenuButton<String>(
+                  user != null ? PopupMenuButton<String>(
                     onSelected: (value) {
                       if (value == 'profile') {
                         Navigator.pushNamed(context, '/profile');
@@ -59,46 +44,26 @@ class CustomNavigationBar extends StatelessWidget {
                         Navigator.pushReplacementNamed(context, '/');
                       }
                     },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     itemBuilder: (context) => [
-                      PopupMenuItem(
-                        value: 'profile',
-                        child: _buildMenuItem(Icons.person, 'Shaxsiy kabinet'),
-                      ),
-                      PopupMenuItem(
-                        value: 'logout',
-                        child: _buildMenuItem(Icons.logout, 'Chiqish'),
-                      ),
+                      PopupMenuItem(value: 'profile', child: _buildMenuItem(Icons.person, 'Shaxsiy kabinet')),
+                      PopupMenuItem(value: 'logout', child: _buildMenuItem(Icons.logout, 'Chiqish'))
                     ],
                     child: CircleAvatar(
                       radius: 20,
                       backgroundColor: Colors.blue[100],
-                      backgroundImage: user.userMetadata?['avatar_url'] != null
-                          ? NetworkImage(user.userMetadata!['avatar_url'])
-                          : null,
-                      child: user.userMetadata?['avatar_url'] == null
-                          ? Text(
-                        user.userMetadata?['name']?.substring(0, 1).toUpperCase() ?? '?',
-                        style: const TextStyle(color: Colors.white),
-                      )
-                          : null,
-                    ),
-                  )
-                      : ElevatedButton(
+                      backgroundImage: user.userMetadata?['avatar_url'] != null ? NetworkImage(user.userMetadata!['avatar_url']) : null,
+                      child: user.userMetadata?['avatar_url'] == null ? Text(user.userMetadata?['name']?.substring(0, 1).toUpperCase() ?? '?', style: const TextStyle(color: Colors.white)) : null
+                    )
+                  ) : ElevatedButton(
                     onPressed: () => Navigator.pushNamed(context, '/login'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    child: const Text('Kirish'),
-                  ),
-                ],
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))
+                    ), child: const Text('Kirish'))
+                ]
               )
             else
               PopupMenuButton<String>(

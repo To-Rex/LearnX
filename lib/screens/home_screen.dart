@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/about_section.dart';
+import '../widgets/certificates_section.dart';
 import '../widgets/contact_section.dart';
 import '../widgets/custom_navigation_bar.dart';
+import '../widgets/faq_section.dart';
 import '../widgets/footer_section.dart';
 import '../widgets/hero_section.dart';
+import '../widgets/partners_section.dart';
 import '../widgets/process_section.dart';
+import '../widgets/register_process_section.dart';
 import '../widgets/services_section.dart';
 import '../widgets/testimonials_section.dart';
+import '../widgets/trust_section.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,6 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
     'services': GlobalKey(),
     'process': GlobalKey(),
     'testimonials': GlobalKey(),
+    'partners': GlobalKey(),        // ✅ Hamkorlar
+    'certificates': GlobalKey(),
+    'about': GlobalKey(),
     'contact': GlobalKey(),
   };
 
@@ -53,6 +62,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ServicesSection(key: sectionKeys['services']),
                   ProcessSection(key: sectionKeys['process']),
                   TestimonialsSection(key: sectionKeys['testimonials']),
+                  RegisterProcessSection(key: sectionKeys['register']),
+                  PartnersSection(key: sectionKeys['partners']),       // ✅ Qo‘shildi
+                  CertificatesSection(key: sectionKeys['certificates']), // ✅ Qo‘shildi
+                  AboutSection(key: sectionKeys['about']),
+                  TrustSection(key: sectionKeys['trust']),
+                  FAQSection(key: sectionKeys['faq']),
                   ContactSection(key: sectionKeys['contact']),
                   const FooterSection(),
                 ],
