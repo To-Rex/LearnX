@@ -7,8 +7,11 @@ import '../widgets/custom_navigation_bar.dart';
 import '../widgets/faq_section.dart';
 import '../widgets/footer_section.dart';
 import '../widgets/hero_section.dart';
+import '../widgets/live_chat_button.dart';
+import '../widgets/news_section.dart';
 import '../widgets/partners_section.dart';
 import '../widgets/process_section.dart';
+import '../widgets/program_finder.dart';
 import '../widgets/register_process_section.dart';
 import '../widgets/services_section.dart';
 import '../widgets/testimonials_section.dart';
@@ -32,6 +35,12 @@ class _HomeScreenState extends State<HomeScreen> {
     'partners': GlobalKey(),        // ✅ Hamkorlar
     'certificates': GlobalKey(),
     'about': GlobalKey(),
+    'faq': GlobalKey(),
+    'news': GlobalKey(),
+    'trust': GlobalKey(),
+    'register': GlobalKey(),
+    'programFinder': GlobalKey(),
+    'footer': GlobalKey(),
     'contact': GlobalKey(),
   };
 
@@ -45,7 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -63,11 +71,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   ProcessSection(key: sectionKeys['process']),
                   TestimonialsSection(key: sectionKeys['testimonials']),
                   RegisterProcessSection(key: sectionKeys['register']),
-                  PartnersSection(key: sectionKeys['partners']),       // ✅ Qo‘shildi
-                  CertificatesSection(key: sectionKeys['certificates']), // ✅ Qo‘shildi
+                  PartnersSection(key: sectionKeys['partners']),
+                  CertificatesSection(key: sectionKeys['certificates']),
                   AboutSection(key: sectionKeys['about']),
                   TrustSection(key: sectionKeys['trust']),
                   FAQSection(key: sectionKeys['faq']),
+
+                  /// ✅ Yangi qo‘shilgan bo‘limlar:
+                  NewsSection(key: sectionKeys['news']),
+                  ProgramFinder(key: sectionKeys['programFinder']),
+
                   ContactSection(key: sectionKeys['contact']),
                   const FooterSection(),
                 ],
@@ -81,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
             right: 0,
             child: CustomNavigationBar(onNavigate: scrollToSection),
           ),
+          const LiveChatButton(),
         ],
       ),
     );

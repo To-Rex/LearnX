@@ -36,25 +36,19 @@ class _FAQSectionState extends State<FAQSection> {
     },
   ];
 
-  List<bool> _expanded = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _expanded = List.generate(faqList.length, (_) => false);
-  }
+  int? _expandedIndex;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 16),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFFE3F2FD), Color(0xFFBBDEFB)],
+          colors: [Color(0xFFF1F5FE), Color(0xFFDEEAFE)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 16),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 850),
@@ -73,6 +67,7 @@ class _FAQSectionState extends State<FAQSection> {
               ...faqList.asMap().entries.map((entry) {
                 final index = entry.key;
                 final item = entry.value;
+                final isExpanded = _expandedIndex == index;
 
                 return AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
@@ -84,44 +79,60 @@ class _FAQSectionState extends State<FAQSection> {
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black12.withOpacity(0.1),
-                        blurRadius: 10,
+                        blurRadius: 8,
                         offset: const Offset(0, 4),
                       ),
                     ],
                   ),
-                  child: ExpansionTile(
-                    tilePadding: const EdgeInsets.symmetric(horizontal: 20),
-                    childrenPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    leading: Icon(
-                      _expanded[index] ? Icons.remove_circle : Icons.add_circle,
-                      color: Colors.blue,
-                    ),
-                    title: Text(
-                      item['question']!,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                        color: Colors.black87,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: ExpansionTile(
+                      tilePadding: const EdgeInsets.symmetric(horizontal: 20),
+                      childrenPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      onExpansionChanged: (bool expanded) {
+                        setState(() {
+                          _expandedIndex = expanded ? index : null;
+                        });
+                      },
+                      shape: const RoundedRectangleBorder(
+                        side: BorderSide.none,
+                        borderRadius: BorderRadius.zero,
                       ),
-                    ),
-                    children: [
-                      Text(
-                        item['answer']!,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          height: 1.6,
-                          color: Colors.black54,
+                      collapsedShape: const RoundedRectangleBorder(
+                        side: BorderSide.none,
+                        borderRadius: BorderRadius.zero,
+                      ),
+                      leading: AnimatedRotation(
+                        duration: const Duration(milliseconds: 300),
+                        turns: isExpanded ? 0.25 : 0,
+                        child: Icon(
+                          Icons.add_circle,
+                          color: Colors.blueAccent,
+                          size: 28,
                         ),
                       ),
-                    ],
-                    onExpansionChanged: (value) {
-                      setState(() {
-                        _expanded[index] = value;
-                      });
-                    },
+                      title: Text(
+                        item['question']!,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      children: [
+                        Text(
+                          item['answer']!,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            height: 1.6,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
-              }),
+              }).toList(),
             ],
           ),
         ),

@@ -5,21 +5,26 @@ class TestimonialsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 130, horizontal: 16),
+      width: screenSize.width,
+      height: screenSize.height * 1.1,
+      padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 16),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFFF8FAFC), Color(0xFFEEF2FF)],
+          colors: [Color(0xFFF1F5FE), Color(0xFFDEEAFE)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Text(
             'Muvaffaqiyat hikoyalari',
             style: TextStyle(
-              fontSize: 32,
+              fontSize: 34,
               fontWeight: FontWeight.bold,
               color: Colors.black87,
             ),
@@ -52,7 +57,7 @@ class TestimonialsSection extends StatelessWidget {
                     testimonial:
                     'AQSh dasturi hayotimni o\'zgartirdi! Ajoyib tajriba, ingliz tili va yangi do‘stlar. WorkTravel har qadamda yonimda bo‘ldi.',
                     initials: 'A',
-                    color: Colors.blue,
+                    color: Colors.teal,
                     width: cardWidth,
                     height: cardHeight,
                   ),
@@ -62,7 +67,7 @@ class TestimonialsSection extends StatelessWidget {
                     testimonial:
                     'Germaniyada ishlash katta imkoniyatlar eshigini ochdi. Ishonchim oshdi, global fikrlashga o‘rgandim.',
                     initials: 'D',
-                    color: Colors.orange,
+                    color: Colors.deepOrange,
                     width: cardWidth,
                     height: cardHeight,
                   ),
@@ -105,7 +110,7 @@ class TestimonialsSection extends StatelessWidget {
       height: height,
       child: Card(
         elevation: 6,
-        shadowColor: color.withOpacity(0.15),
+        shadowColor: color.withOpacity(0.2),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -131,7 +136,7 @@ class TestimonialsSection extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   CircleAvatar(
