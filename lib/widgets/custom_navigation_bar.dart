@@ -47,7 +47,8 @@ class CustomNavigationBar extends StatelessWidget {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     itemBuilder: (context) => [
                       PopupMenuItem(value: 'profile', child: _buildMenuItem(Icons.person, 'Shaxsiy kabinet')),
-                      PopupMenuItem(value: 'logout', child: _buildMenuItem(Icons.logout, 'Chiqish'))
+                      PopupMenuItem(value: 'admin', child: _buildMenuItem(Icons.admin_panel_settings, 'admin')),
+                      PopupMenuItem(value: 'logout', child: _buildMenuItem(Icons.logout, 'Chiqish', onTap: () => Navigator.pushReplacementNamed(context, '/admin'))),
                     ],
                     child: CircleAvatar(
                       radius: 20,
@@ -81,7 +82,10 @@ class CustomNavigationBar extends StatelessWidget {
                     Navigator.pushReplacementNamed(context, '/');
                   } else if (value == 'profile') {
                     Navigator.pushNamed(context, '/profile');
-                  } else {
+                  } else if (value == 'admin') {
+                    Navigator.pushNamed(context, '/admin');
+                  }
+                  else {
                     onNavigate(value);
                   }
                 },
@@ -122,6 +126,11 @@ class CustomNavigationBar extends StatelessWidget {
                       value: 'login',
                       child: _buildMenuItem(Icons.login, 'Kirish'),
                     ),
+                  if (user != null)
+                    PopupMenuItem(
+                      value: 'admin',
+                      child: _buildMenuItem(Icons.admin_panel_settings, 'admin'),
+                    ),
                 ],
               ),
           ],
@@ -147,7 +156,7 @@ class CustomNavigationBar extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuItem(IconData icon, String title) {
+  Widget _buildMenuItem(IconData icon, String title, {Function()? onTap}) {
     return Row(
       children: [
         Icon(icon, color: Colors.blueAccent, size: 20),

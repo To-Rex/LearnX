@@ -7,6 +7,8 @@ import 'package:learnx/screens/profile_screen.dart';
 import 'package:learnx/screens/register_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'admin/screens/admin_dashboard.dart';
+
 Future<void> main() async {
   usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +39,7 @@ class WorkTravelApp extends StatelessWidget {
         '/register': (context) => const RegisterScreen(),
         '/dashboard': (context) => const DashboardScreen(),
         '/profile': (context) => const ProfileScreen(),
+        '/admin': (context) => const AdminDashboard(),
       },
     );
   }

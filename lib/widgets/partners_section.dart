@@ -10,7 +10,7 @@ class PartnersSection extends StatefulWidget {
 
 class _PartnersSectionState extends State<PartnersSection> {
   final ScrollController _scrollController = ScrollController();
-  late Timer _scrollTimer;
+  Timer? _scrollTimer;
 
   final List<String> partners = [
     'https://avatars.mds.yandex.net/i?id=1907b636e28a91173b8fbfac2437557a_l-10815658-images-thumbs&n=13',
@@ -25,16 +25,21 @@ class _PartnersSectionState extends State<PartnersSection> {
   @override
   void initState() {
     super.initState();
-    _startAutoScroll();
+    // AutoScroll faqat sahifa build bo‘lgach boshlanadi
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _startAutoScroll();
+    });
   }
 
   void _startAutoScroll() {
-    const double scrollSpeed = 0.5; // 👈 Sekin aylanish uchun tezlik
+    const double scrollSpeed = 0.5;
     _scrollTimer = Timer.periodic(const Duration(milliseconds: 30), (timer) {
       if (_scrollController.hasClients) {
-        double newOffset = _scrollController.offset + scrollSpeed;
-        if (newOffset >= _scrollController.position.maxScrollExtent) {
-          // Loop boshlanishiga qaytamiz
+        final maxExtent = _scrollController.position.maxScrollExtent;
+        final currentOffset = _scrollController.offset;
+        final newOffset = currentOffset + scrollSpeed;
+
+        if (newOffset >= maxExtent) {
           _scrollController.jumpTo(0);
         } else {
           _scrollController.jumpTo(newOffset);
@@ -45,14 +50,14 @@ class _PartnersSectionState extends State<PartnersSection> {
 
   @override
   void dispose() {
-    _scrollTimer.cancel();
+    _scrollTimer?.cancel();
     _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final repeatedPartners = [...partners, ...partners]; // infinite loop effekti
+    final repeatedPartners = [...partners, ...partners];
 
     return Container(
       color: Colors.grey[100],
