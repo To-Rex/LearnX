@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../models/partner_model.dart';
 import '../models/user_model.dart';
 
 class AuthService {
   final SupabaseClient _client = Supabase.instance.client;
 
   /// Foydalanuvchini ro‘yxatdan o‘tkazish
-  Future<void> signUp(
-      BuildContext context,
-      String email,
-      String password,
-      String fullName, {required DateTime birthDate, required String gender}) async {
-
+  Future<void> signUp(BuildContext context, String email, String password, String fullName, {required DateTime birthDate, required String gender}) async {
     final authResponse = await _client.auth.signUp(
         email: email,
         password: password,
@@ -56,11 +52,6 @@ class AuthService {
     await _client.auth.signOut();
   }
 
-  /// Joriy foydalanuvchini olish (null bo‘lishi mumkin)
-/*  User? getCurrentUser() {
-    return _client.auth.currentUser;
-  }*/
-
   UserModel? getCurrentUser() {
     final user = _client.auth.currentUser;
     if (user == null) return null;
@@ -73,7 +64,6 @@ class AuthService {
       gender: user.userMetadata?['gender'] ?? '',
     );
   }
-
 
   Future<UserModel?> getCurrentUserProfile() async {
     final user = _client.auth.currentUser;
@@ -91,6 +81,20 @@ class AuthService {
       birthDate: response['birth_date'] ?? '',
       gender: response['gender'] ?? '',
     );
+  }
+
+  Future<List<PartnerModel>> getPartners() async {
+    final response = await _client
+        .from('partners')
+        .select('*')
+        .order('created_at', ascending: false);
+
+    print(response);
+    // Ma'lumotlar ro'yxatga aylantirilyapti
+    final List<PartnerModel> partners = (response as List<dynamic>)
+        .map((item) => PartnerModel.fromMap(item as Map<String, dynamic>))
+        .toList();
+    return partners;
   }
 
 }

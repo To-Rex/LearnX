@@ -39,7 +39,10 @@ class CustomNavigationBar extends StatelessWidget {
                     onSelected: (value) {
                       if (value == 'profile') {
                         Navigator.pushNamed(context, '/profile');
-                      } else if (value == 'logout') {
+                      } else if (value == 'admin') {
+                        Navigator.pushNamed(context, '/admin');
+                      }
+                      else if (value == 'logout') {
                         Supabase.instance.client.auth.signOut();
                         Navigator.pushReplacementNamed(context, '/');
                       }
@@ -75,6 +78,7 @@ class CustomNavigationBar extends StatelessWidget {
                 ),
                 elevation: 8,
                 onSelected: (value) {
+                  print(value);
                   if (value == 'login') {
                     Navigator.pushNamed(context, '/login');
                   } else if (value == 'logout') {
@@ -114,7 +118,7 @@ class CustomNavigationBar extends StatelessWidget {
                   if (user != null)
                     PopupMenuItem(
                       value: 'profile',
-                      child: _buildMenuItem(Icons.person, 'Shaxsiy kabinet'),
+                      child: _buildMenuItem(Icons.person, 'Shaxsiy kabinet')
                     ),
                   if (user != null)
                     PopupMenuItem(
