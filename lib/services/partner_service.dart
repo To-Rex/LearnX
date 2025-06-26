@@ -27,4 +27,8 @@ class PartnerService {
       'p_cauntry': cauntry,
     });
   }
+
+  Future<void> deletePartner(id) async {
+    await _client.rpc('delete_partner', params: {'p_id': id});
+  }
 }
