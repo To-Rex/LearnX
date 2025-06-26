@@ -35,7 +35,5 @@ class PartnerModel {
       'cauntry': cauntry,
       'created_at': createdAt.toIso8601String(),
     };
-
-
   }
 }
