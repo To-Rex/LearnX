@@ -1,33 +1,12 @@
 import 'package:flutter/material.dart';
+import '../models/certificate_model.dart';
+import '../services/certificate_service.dart';
 
 class CertificatesSection extends StatelessWidget {
   const CertificatesSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final certificates = [
-      {
-        'title': 'IELTS Sertifikat',
-        'url': 'https://avatars.mds.yandex.net/i?id=960d0bef05de6270360caa27ec1f381a_l-4935395-images-thumbs&n=13',
-      },
-      {
-        'title': 'Koreys tili Sertifikat',
-        'url': 'https://avatars.mds.yandex.net/i?id=6c059852be0beb6b452fae90fca21f13da805ee0-5858063-images-thumbs&n=13',
-      },
-      {
-        'title': 'Xalqaro IT Kursi',
-        'url': 'https://avatars.mds.yandex.net/i?id=dfd5356c28d1516ff542660576f36019_l-4011747-images-thumbs&n=13',
-      },
-      {
-        'title': 'Chegara Bilimi',
-        'url': 'https://avatars.mds.yandex.net/i?id=d0a009d153fd9c8e8b11ce1c123f6774_l-5310403-images-thumbs&n=13',
-      },
-      {
-        'title': 'Hukum Online',
-        'url': 'https://i2.wp.com/learning.hukumonline.com/wp-content/uploads/2020/09/sertifikat-dimas-03-Copy.jpg',
-      },
-    ];
-
     return Container(
       color: Colors.grey[50],
       padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 16),
@@ -38,20 +17,33 @@ class CertificatesSection extends StatelessWidget {
             style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 30),
-          SizedBox(
-            height: 220,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: certificates.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 20),
-              itemBuilder: (context, index) {
-                final cert = certificates[index];
-                return _CertificateCard(
-                  imageUrl: cert['url']!,
-                  title: cert['title']!,
-                );
-              },
-            ),
+          FutureBuilder<List<CertificateModel>>(
+            future: CertificateService().getCertificates(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              }
+              if (snapshot.hasError || !snapshot.hasData) {
+                return const Text('Xatolik yuz berdi yoki maʼlumot yo‘q.');
+              }
+
+              final certificates = snapshot.data!;
+              return SizedBox(
+                height: 220,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: certificates.length,
+                  separatorBuilder: (_, __) => const SizedBox(width: 20),
+                  itemBuilder: (context, index) {
+                    final cert = certificates[index];
+                    return _CertificateCard(
+                      imageUrl: cert.imageUrl,
+                      title: cert.title,
+                    );
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -111,7 +103,6 @@ class _CertificateCardState extends State<_CertificateCard> {
                   const Center(child: Icon(Icons.broken_image)),
                 ),
               ),
-              // Overlay
               Positioned.fill(
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
@@ -129,7 +120,6 @@ class _CertificateCardState extends State<_CertificateCard> {
                   ),
                 ),
               ),
-              // Title
               Positioned(
                 bottom: 12,
                 left: 12,
