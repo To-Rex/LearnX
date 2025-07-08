@@ -1,7 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../models/certificate_model.dart';
+import '../../models/news_model.dart';
 import '../../models/partner_model.dart';
+import '../../services/news_service.dart';
 import '../../services/partner_service.dart';
 import '../../services/certificate_service.dart';
 import '../../services/web_storage_service.dart';
@@ -28,6 +30,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   List<PartnerModel> partners = [];
   List<CertificateModel> certificates = [];
+  final NewsService _newsService = NewsService();
+  List<NewsModel> newsList = [];
 
   String? _selectedPartnerImage;
   String? _selectedCertificateImage;
@@ -41,8 +45,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
   Future<void> _loadData() async {
     final partnerList = await _partnerService.getPartners();
     final certificateList = await _certificateService.getCertificates();
+    final newsItems = await _newsService.getNews();
+
     setState(() {
       partners = partnerList;
+      newsList = newsItems;
       certificates = certificateList;
     });
   }
@@ -95,6 +102,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
       _loadData();
     }
   }
+
+  Future<void> _deleteNews(String? id) async {
+    if (id != null) {
+      await _newsService.deleteNews(id);
+      _loadData();
+    }
+  }
+
 
   void _clearPartnerFields() {
     _partnerName.clear();
@@ -149,6 +164,74 @@ class _AdminDashboardState extends State<AdminDashboard> {
       ),
     );
   }
+
+  void _showAddNewsDialog() {
+    final _title = TextEditingController();
+    final _short = TextEditingController();
+    final _full = TextEditingController();
+    final _date = DateTime.now();
+    String? _selectedImage;
+    final _formKey = GlobalKey<FormState>();
+
+    void _pickImage() async {
+      final imageUrl = await _webStorageService.pickAndUploadImage(bucket: 'news');
+      if (imageUrl != null) {
+        setState(() => _selectedImage = imageUrl);
+      }
+    }
+
+    _showBlurDialog(
+      child: Form(
+        key: _formKey,
+        child: StatefulBuilder(
+          builder: (ctx, setState) => SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildDialogTitle("Yangi Yangilik Qo'shish"),
+                const SizedBox(height: 16),
+                _buildInput("Sarlavha", _title),
+                _buildInput("Qisqacha matn", _short),
+                _buildInput("To‘liq matn", _full),
+                const SizedBox(height: 16),
+                _buildImageBox(_selectedImage, () async {
+                  final img = await _webStorageService.pickAndUploadImage(bucket: 'news');
+                  if (img != null) setState(() => _selectedImage = img);
+                }),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Bekor qilish'),
+                    ),
+                    const SizedBox(width: 8),
+                    FilledButton(
+                      onPressed: () async {
+                        if (!_formKey.currentState!.validate() || _selectedImage == null) return;
+                        await _newsService.addNews(
+                          title: _title.text,
+                          shortText: _short.text,
+                          fullText: _full.text,
+                          imageUrl: _selectedImage!,
+                          date: DateTime.now(),
+                        );
+                        _loadData();
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Qo‘shish'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 
   void _showAddCertificateDialog() {
     _showBlurDialog(
@@ -439,6 +522,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -487,6 +571,20 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 (index) => certificates[index].id.toString(),
             _deleteCertificate, // ✅ qo‘shildi
           ),
+
+          _buildList(
+            'Yangiliklar',
+            newsList.map((e) => {
+              'photo': e.imageUrl,
+              'name': e.title,
+            }).toList(),
+            'photo',
+            'name',
+            _showAddNewsDialog,
+                (index) => newsList[index].id.toString(),
+            _deleteNews,
+          ),
+
 
         ],
       ),

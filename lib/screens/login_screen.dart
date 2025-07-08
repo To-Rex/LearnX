@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
           password: _passwordController.text,
         );
         if (response.user != null && mounted) {
-          Navigator.pushReplacementNamed(context, '/dashboard');
+          Navigator.pushReplacementNamed(context, '/');
         }
       } catch (e) {
         if (mounted) {
