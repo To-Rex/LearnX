@@ -217,7 +217,7 @@ class _HeroSliderSectionState extends State<HeroSection> {
     final isTablet = width >= 600 && width < 1024;
 
     return SizedBox(
-      height: height * 0.9,
+      height: height * 0.95,
       width: double.infinity,
       child: Stack(
         fit: StackFit.expand,
@@ -241,6 +241,19 @@ class _HeroSliderSectionState extends State<HeroSection> {
           ),
 
           // Overlay (gradient)
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.black.withOpacity(0.65),
+                  Colors.black.withOpacity(0.2),
+                ],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+              ),
+            ),
+          ),
+
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(

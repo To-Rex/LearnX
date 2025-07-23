@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:learnx/screens/dashboard_screen.dart';
+import 'package:learnx/screens/detailes/visa_detail.dart';
 import 'package:learnx/screens/home_screen.dart';
 import 'package:learnx/screens/login_screen.dart';
 import 'package:learnx/screens/profile_screen.dart';
@@ -40,6 +41,7 @@ class WorkTravelApp extends StatelessWidget {
         '/dashboard': (context) => const DashboardScreen(),
         '/profile': (context) => const ProfileScreen(),
         '/admin': (context) => const AdminDashboard(),
+        '/visa-detail': (context) => VisaDetail(),
       },
     );
   }

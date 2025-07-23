@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../screens/detailes/visa_detail.dart';
+
 class ServicesSection extends StatelessWidget {
   const ServicesSection({super.key});
 
@@ -33,38 +35,41 @@ class ServicesSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(child: _buildServiceCard(
-                    'Koreya Dasturlari',
-                    'Amerika madaniyatini his qiling, AQSh bo\'ylab kurortlar, o\'yin-kulgi parklari va mehmondo\'stlik joylarida ishlang.',
-                    Icons.flag,
-                    Colors.blueAccent,
-                    [
-                      'J-1 Viza yordami',
-                      '4 oylik dasturlar',
-                      'Turar joy yordami',
-                    ],
-                  )),
-                  const SizedBox(width: 24),
-                  Expanded(child: _buildServiceCard(
-                    'Yevropa Almashinuvi',
-                    'Mehmondo\'stlik, turizm va mavsumiy ish imkoniyatlari orqali Yevropa madaniyatini kashf eting.',
-                    Icons.language,
-                    Colors.deepOrangeAccent,
-                    [
-                      'Yevropa Ittifoqi ish ruxsatlari',
-                      '6 oylik dasturlar',
-                      'Til o\'rgatish',
-                    ],
-                  )),
-                  const SizedBox(width: 24),
-                  Expanded(child: _buildServiceCard(
-                    'Maxsus Dasturlar',
-                    'Sizning aniq martaba maqsadlaringiz va qiziqishlaringizga moslashtirilgan ish va sayohat tajribalari.',
-                    Icons.workspace_premium,
+                    context,
+                    'Chet Elga O\'qish',
+                    'Xorijiy universitetlarga joylashish va o\'qish uchun yordam dasturlari.',
+                    Icons.school,
                     Colors.teal,
                     [
-                      'Shaxsiy moslashtirish',
-                      'Moslashuvchan davomiylik',
-                      'Martaba rivojlantirish',
+                      'Universitet tanlash',
+                      'Hujjatlar topshirish',
+                      'Stipendiya maslahatlari',
+                    ],
+                  )),
+                  const SizedBox(width: 24),
+                  Expanded(child: _buildServiceCard(
+                    context,
+                    'Work and Travel',
+                    'Chet elda ishlash va sayohat qilish imkoniyatini taqdim etuvchi dasturlar.',
+                    Icons.work,
+                    Colors.deepOrangeAccent,
+                    [
+                      'Ish joylashuvi',
+                      'Turar joy yordami',
+                      'Madaniy almashinuv',
+                    ],
+                  )),
+                  const SizedBox(width: 24),
+                  Expanded(child: _buildServiceCard(
+                    context,
+                    'Viza Yordami',
+                    'Turli mamlakatlar uchun viza olish jarayonida professional yordam va maslahatlar.',
+                    Icons.description,
+                    Colors.blueAccent,
+                    [
+                      'Hujjatlar tayyorlash',
+                      'Elchixona bilan aloqa',
+                      'Viza turi bo\'yicha maslahat',
                     ],
                   )),
                 ],
@@ -72,38 +77,42 @@ class ServicesSection extends StatelessWidget {
                   : Column(
                 children: [
                   _buildServiceCard(
-                    'AQSh Dasturlari',
-                    'Amerika madaniyatini his qiling, AQSh bo\'ylab kurortlar, o\'yin-kulgi parklari va mehmondo\'stlik joylarida ishlang.',
-                    Icons.flag,
-                    Colors.blueAccent,
-                    [
-                      'J-1 Viza yordami',
-                      '4 oylik dasturlar',
-                      'Turar joy yordami',
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  _buildServiceCard(
-                    'Yevropa Almashinuvi',
-                    'Mehmondo\'stlik, turizm va mavsumiy ish imkoniyatlari orqali Yevropa madaniyatini kashf eting.',
-                    Icons.language,
-                    Colors.deepOrangeAccent,
-                    [
-                      'Yevropa Ittifoqi ish ruxsatlari',
-                      '6 oylik dasturlar',
-                      'Til o\'rgatish',
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  _buildServiceCard(
-                    'Maxsus Dasturlar',
-                    'Sizning aniq martaba maqsadlaringiz va qiziqishlaringizga moslashtirilgan ish va sayohat tajribalari.',
-                    Icons.workspace_premium,
+                    context,
+                    'Chet Elga O\'qish',
+                    'Xorijiy universitetlarga joylashish va o\'qish uchun yordam dasturlari.',
+                    Icons.school,
                     Colors.teal,
                     [
-                      'Shaxsiy moslashtirish',
-                      'Moslashuvchan davomiylik',
-                      'Martaba rivojlantirish',
+                      'Universitet tanlash',
+                      'Hujjatlar topshirish',
+                      'Stipendiya maslahatlari',
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  _buildServiceCard(
+                    context,
+                    'Work and Travel',
+                    'Chet elda ishlash va sayohat qilish imkoniyatini taqdim etuvchi dasturlar.',
+                    Icons.work,
+                    Colors.deepOrangeAccent,
+                    [
+                      'Ish joylashuvi',
+                      'Turar joy yordami',
+                      'Madaniy almashinuv',
+                    ],
+                  ),
+
+                  const SizedBox(height: 24),
+                  _buildServiceCard(
+                    context,
+                    'Viza Yordami',
+                    'Turli mamlakatlar uchun viza olish jarayonida professional yordam va maslahatlar.',
+                    Icons.description,
+                    Colors.blueAccent,
+                    [
+                      'Hujjatlar tayyorlash',
+                      'Elchixona bilan aloqa',
+                      'Viza turi bo\'yicha maslahat',
                     ],
                   ),
                 ],
@@ -115,67 +124,74 @@ class ServicesSection extends StatelessWidget {
     );
   }
 
-  Widget _buildServiceCard(String title, String description, IconData icon, Color color, List<String> features) {
+
+  Widget _buildServiceCard(context, String title, String description, IconData icon, Color color, List<String> features) {
     return Card(
       elevation: 5,
       color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 56,
-              height: 56,
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Icon(
-                icon,
-                size: 28,
-                color: color,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              description,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black54,
-                height: 1.5,
-              ),
-            ),
-            const SizedBox(height: 20),
-            ...features.map((feature) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Row(
-                children: [
-                  Icon(Icons.check_circle_outline, size: 16, color: Colors.green),
-                  const SizedBox(width: 8),
-                  Flexible(
-                    child: Text(
-                      feature,
-                      style: const TextStyle(fontSize: 14, color: Colors.black87),
-                    ),
+      child: InkWell(
+        onTap: () {
+          //VisaDetail
+          Navigator.pushNamed(context, '/visa-detail', arguments: {'title': title});
+        },
+        child:  Container(
+          padding: const EdgeInsets.all(24),
+          constraints: const BoxConstraints(maxWidth: 400, minWidth: 300, minHeight: 400),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                ],
+                  child: Icon(
+                      icon,
+                      size: 28, color: color
+                  )
               ),
-            )),
-          ],
-        ),
+              const SizedBox(height: 20),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                description,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 20),
+              ...features.map((feature) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  children: [
+                    Icon(Icons.check_circle_outline, size: 16, color: Colors.green),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        feature,
+                        style: const TextStyle(fontSize: 14, color: Colors.black87),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+            ],
+          ),
+        )
       ),
     );
   }

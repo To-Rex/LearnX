@@ -65,7 +65,7 @@ class AuthService {
     );
   }
 
-  Future<UserModel?> getCurrentUserProfile() async {
+  Future<UserModel?> getCurrentUserProfile1() async {
     final user = _client.auth.currentUser;
     if (user == null) return null;
 
@@ -82,6 +82,48 @@ class AuthService {
       gender: response['gender'] ?? '',
     );
   }
+
+  Future<UserModel?> getCurrentUserProfile() async {
+    try {
+      final session = _client.auth.currentSession;
+      if (session == null || session.user == null) {
+        debugPrint('❗️ Session not found: User not logged in');
+        return null;
+      }
+
+      final userId = session.user.id;
+
+      final response = await _client
+          .from('users')
+          .select()
+          .eq('id', userId)
+          .maybeSingle();
+
+      if (response == null) {
+        debugPrint('❗️ User not found in DB');
+        return UserModel(
+          id: userId,
+          email: session.user.email ?? '',
+          name: session.user.userMetadata?['full_name'] ?? '',
+          birthDate: session.user.userMetadata?['birth_date'] ?? '',
+          gender: session.user.userMetadata?['gender'] ?? '',
+        );
+      }
+
+      return UserModel(
+        id: response['id'],
+        email: response['email'] ?? '',
+        name: response['full_name'] ?? '',
+        birthDate: response['birth_date'] ?? '',
+        gender: response['gender'] ?? '',
+      );
+    } catch (e) {
+      debugPrint('❌ Error in getCurrentUserProfile: $e');
+      return null;
+    }
+  }
+
+
 
   Future<List<PartnerModel>> getPartners() async {
     final response = await _client
